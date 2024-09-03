@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume Upload</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <div class="logo-container">
+        <img src="{{ url_for('static', filename='logo.png') }}" alt="Company Logo" class="logo">
+    </div>
+</head>
+<body>
+    <div class="container mt-5">
+        
+        <h1 class="text-center mb-4"><span>Upload and Search Resumes</span></h1>
+
+        <!-- Display Flash Messages -->
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div class="alert alert-info">
+                    <ul>
+                    {% for message in messages %}
+                        <li>{{ message }}</li>
+                    {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        <!-- Form to Upload Folder or Multiple Resumes -->
+        <div class="mb-4">
+            <form action="{{ url_for('upload_files') }}" method="post" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="folder">Select a folder containing resumes or multiple files:</label>
+                    <input type="file" id="folder" name="files[]" webkitdirectory multiple class="form-control-file">
+                </div>
+                <button type="submit" class="btn btn-primary">Upload</button>
+            </form>
+        </div>
+        
+        <!-- Form to Search Resumes -->
+        <div class="mb-4">
+            <form action="{{ url_for('search') }}" method="post">
+                <div class="form-group">
+                    <input type="text" name="skill" class="form-control" placeholder="Enter keywords">
+                </div>
+                <button type="submit" class="btn btn-secondary">Search</button>
+            </form>
+        </div>
+
+        <!-- View Database Button -->
+        <div class="mt-4 text-center">
+            <a href="{{ url_for('view_database') }}" class="btn btn-info">View Database</a>
+        </div>
+    </div>
+
+
+
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
