@@ -48,8 +48,7 @@ def normalize_text(text):
     return text
 
 def extract_name_from_filename(filename):
-    """Extract the name part from the filename more flexibly."""
-    # Improved regex pattern to handle diverse naming formats
+    """Extract the name part from the filename."""
     match = re.search(r'_(\w+(?:_\w+)*)_', filename)
     if match:
         # Splitting by double underscores to clean any trailing job titles or locations
@@ -180,7 +179,7 @@ def view_database():
 def delete_resume(filename):
     """Delete the selected resume from the database and file system after password confirmation."""
     password = request.form.get('password')
-    correct_password = 'Logisoft@2016'  # Set your desired password here
+    correct_password = 'llllll'  # Set your desired password here
     
     # Check if the entered password is correct
     if password != correct_password:
@@ -245,7 +244,7 @@ def bulk_delete():
 
 def validate_password(password):
     # Your password validation logic here
-    return password == 'Logisoft@2016'
+    return password == 'lllll'
 
 
 
@@ -282,7 +281,6 @@ def highlight_keywords(text, keyword):
 
 
 if __name__ == '__main__':
-    # Ensure the uploads directory exists
     if not os.path.exists(UPLOAD_FOLDER):
         os.makedirs(UPLOAD_FOLDER)
     
