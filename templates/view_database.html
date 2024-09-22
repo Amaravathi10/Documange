@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resumes in Database</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <div class="logo-container">
+        <img src="{{ url_for('static', filename='logo.png') }}" alt="Company Logo" class="logo">
+    </div>
+    <style>
+        /* Page Background */
+        body {
+            background: url('../static/background.jpg') no-repeat center center fixed;
+            background-size: cover;
+            color: #333;
+        }
+
+        /* Custom Card Styling */
+        .resume-card {
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .resume-card:hover {
+            transform: scale(1.03);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+        }
+
+        .resume-title {
+            font-size: 0.7rem;
+            font-weight: bold;
+            color: white;
+            margin-bottom: 10px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: block;
+        }
+
+        .btn {
+            margin-top: 10px;
+        }
+
+        .btn-outline-primary, .btn-outline-danger {
+            border-radius: 20px;
+            transition: all 0.3s;
+        }
+
+        .btn-outline-primary:hover, .btn-outline-danger:hover {
+            transform: translateY(-2px);
+        }
+
+        .delete-section {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Statistics Panel */
+        .statistics-panel {
+            background: rgba(0, 123, 255, 0.8);
+            color: #fff;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 30px;
+        }
+
+        .statistics-panel h5 {
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .statistics-panel p {
+            font-size: 0.95rem;
+        }
+
+        .overlay {
+            background: rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            border-radius: 10px;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <!-- Add this in the <body> section of each HTML file -->
+<div class="container mt-3 text-right">
+    <a href="{{ url_for('logout') }}" class="btn btn-danger">Logout</a>
+</div>
+    <div class="container mt-5">
+        <h1 class="text-center text-white mb-4">Resumes in Database</h1>
+
+        <!-- Flash message container -->
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div class="alert alert-info alert-dismissible fade show" role="alert">
+                    {{ messages[0] }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        <!-- Bulk Actions Toolbar -->
+        <div class="mb-4">
+            <button id="bulk-delete-btn" class="btn btn-outline-danger">
+                <i class="fas fa-trash"></i> Bulk Delete
+            </button>
+        </div>
+
+        <!-- Bulk Delete Form -->
+        <form id="bulk-delete-form" action="{{ url_for('bulk_delete') }}" method="post" style="display: none;">
+            <input type="password" name="password" placeholder="Enter password" class="form-control-sm" required>
+            <button type="submit" class="btn btn-outline-danger btn-sm mt-2">Confirm Deletion</button>
+            <!-- Hidden input to hold filenames -->
+            <input type="hidden" name="filenames">
+        </form>
+        
+
+        <!-- Statistics Panel -->
+        <div class="statistics-panel overlay mb-4">
+            <h5 class="card-title">Database Overview</h5>
+            <p class="card-text">Total Resumes: {{ resumes|length }}</p>
+            <p class="card-text">Recent Additions: 5 (Last 7 days)</p>
+        </div>
+
+        <!-- Resume Summary Cards -->
+        <!-- Resume Summary Cards -->
+<div class="row">
+    {% for resume in resumes %}
+        <div class="col-md-4">
+            <div class="resume-card">
+                <div class="resume-title">
+                    <i class="fas fa-file-alt"></i> {{ resume[0] }}
+                </div>
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input resume-checkbox" id="resume-{{ loop.index }}" value="{{ resume[0] }}">
+                    <label class="form-check-label" for="resume-{{ loop.index }}">Select</label>
+                </div>
+                <div class="delete-section mt-3">
+                    <a href="{{ url_for('view_word_document', filename=resume[0]) }}" class="btn btn-outline-primary btn-sm">
+                        <i class="fas fa-eye"></i> View
+                    </a>
+                    <form action="{{ url_for('delete_resume', filename=resume[0]) }}" method="post" style="display:inline;" onsubmit="return confirmDeletion(this);">
+                        <div class="password-container" style="display: none;">
+                            <input type="password" name="password" placeholder="Enter password" class="form-control-sm" required>
+                            <button type="submit" class="btn btn-outline-danger btn-sm mt-2">Confirm</button>
+                        </div>
+                        <button type="button" class="btn btn-outline-danger btn-sm delete-btn" onclick="showPasswordField(this);">
+                            <i class="fas fa-trash"></i> Delete
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+
+        <div class="text-center mt-4">
+            <a href="{{ url_for('index') }}" class="btn btn-primary">Back to Home</a>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        // Function to show the password input field when delete button is clicked
+        function showPasswordField(button) {
+            const form = button.closest('form');
+            const passwordContainer = form.querySelector('.password-container');
+            passwordContainer.style.display = 'block';
+            button.style.display = 'none'; // Hide the delete button
+        }
+
+        // Function to confirm the deletion process
+        function confirmDeletion(form) {
+            return confirm('Are you sure you want to delete this resume?');
+        }
+
+        // Function to handle bulk delete
+        // Function to handle bulk Delete
+        document.getElementById('bulk-delete-btn').addEventListener('click', function() {
+            const checkboxes = document.querySelectorAll('.resume-checkbox:checked');
+            if (checkboxes.length === 0) {
+                alert('Please select at least one resume to delete.');
+                return;
+            }
+            const filenames = Array.from(checkboxes).map(cb => cb.value);
+            
+            // Display the password prompt form
+            const bulkDeleteForm = document.getElementById('bulk-delete-form');
+            bulkDeleteForm.querySelector('input[name="password"]').value = ''; // Clear any previous password
+            bulkDeleteForm.querySelector('input[name="filenames"]').value = JSON.stringify(filenames); // Convert array to JSON string
+            bulkDeleteForm.style.display = 'block';
+    // Optionally, you can store filenames in a hidden field for submission
+            const hiddenInput = document.createElement('input');
+            hiddenInput.type = 'hidden';
+            hiddenInput.name = 'filenames';
+            hiddenInput.value = JSON.stringify(filenames); // Convert array to JSON string
+            bulkDeleteForm.appendChild(hiddenInput);
+        });
+
+    </script>
+</body>
+</html>

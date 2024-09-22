@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Results</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <div class="logo-container">
+        <img src="{{ url_for('static', filename='logo.png') }}" alt="Company Logo" class="logo">
+    </div>
+</head>
+<body>
+    <!-- Add this in the <body> section of each HTML file -->
+<div class="container mt-3 text-right">
+    <a href="{{ url_for('logout') }}" class="btn btn-danger">Logout</a>
+</div>
+    <div class="container mt-5">
+        <h1>Search Results for "{{ skills }}"</h1>
+        {% if results %}
+            <ul>
+                {% for result in results %}
+                <li><a href="{{ url_for('view_resume', filename=result[0], keywords=skills) }}">{{ result[0] }}</a></li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No resumes found containing the skills "{{ skills }}"</p>
+        {% endif %}
+        <a href="{{ url_for('index') }}">Go Back</a>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
