@@ -14,16 +14,9 @@
         <img src="{{ url_for('static', filename='logo.png') }}" alt="Company Logo" class="logo">
     </div>
     <style>
-        /* Page Background */
-        body {
-            background: url('../static/background.jpg') no-repeat center center fixed;
-            background-size: cover;
-            color: #333;
-        }
-
         /* Custom Card Styling */
         .resume-card {
-            background: rgba(0, 0, 0, 0.5);
+            background: rgba(0, 0, 255, 0.1);
             border-radius: 10px;
             padding: 20px;
             margin-bottom: 20px;
@@ -39,7 +32,7 @@
         .resume-title {
             font-size: 0.7rem;
             font-weight: bold;
-            color: white;
+            color: #1e88e5;
             margin-bottom: 10px;
             white-space: nowrap;
             overflow: hidden;
@@ -68,8 +61,8 @@
 
         /* Statistics Panel */
         .statistics-panel {
-            background: rgba(0, 123, 255, 0.8);
-            color: #fff;
+            background: rgba(0, 0, 255, 0.3);
+            color: #1e88e5;
             border-radius: 10px;
             padding: 15px;
             margin-bottom: 30px;
@@ -85,20 +78,18 @@
         }
 
         .overlay {
-            background: rgba(0, 0, 0, 0.7);
+            background: rgba(0, 0, 255, 0.1);
             padding: 20px;
             border-radius: 10px;
-            color: #fff;
+            color: #1e88e5;
         }
     </style>
 </head>
 <body>
     <!-- Add this in the <body> section of each HTML file -->
-<div class="container mt-3 text-right">
-    <a href="{{ url_for('logout') }}" class="btn btn-danger">Logout</a>
-</div>
+        <div class ="logout"><a href="{{ url_for('logout') }}" class="btn btn-danger">Logout</a></div>
     <div class="container mt-5">
-        <h1 class="text-center text-white mb-4">Resumes in Database</h1>
+        <h1 class="text-center mb-4">Resumes in Database</h1>
 
         <!-- Flash message container -->
         {% with messages = get_flashed_messages() %}

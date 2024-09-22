@@ -14,11 +14,11 @@
 </head>
 <body>
     <!-- Add this in the <body> section of each HTML file -->
-<div class="container mt-3 text-right">
-    <a href="{{ url_for('logout') }}" class="btn btn-danger">Logout</a>
-</div>
+
+<div class ="logout"><a href="{{ url_for('logout') }}" class="btn btn-danger">Logout</a></div>
+
     <div class="container mt-5">
-        <h1 class="text-center mb-4">Upload and Search Resumes</h1>
+        <h1 class="text-center mb-4"><span style="color: black;">Upload and Search</span> Resumes</h1>
 
         <!-- Display Flash Messages -->
         {% with messages = get_flashed_messages() %}
